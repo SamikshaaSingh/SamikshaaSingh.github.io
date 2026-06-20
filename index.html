@@ -44,7 +44,7 @@
 
         /* Glassmorphism Utilities */
         .glass-panel {
-            background: rgba(12, 12, 29, 0.6);
+            background: rgba(12, 12, 29, 0.60);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(139, 92, 246, 0.15);
@@ -58,11 +58,11 @@
             content: "";
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(139, 92, 246, 0.15), transparent 40%);
+            background: radial-gradient(350px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(139, 92, 246, 0.18), transparent 50%);
             z-index: 0;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.5s;
+            transition: opacity 0.5s ease;
         }
         .glass-panel:hover::before {
             opacity: 1;
@@ -78,7 +78,8 @@
         }
 
         #particle-canvas {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.65;
+            pointer-events: none;
         }
 
         /* Global Fade-Up Animation */
@@ -95,7 +96,6 @@
         /* Timeline Animations & Mobile Adjustments */
         .timeline-line {
             position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%;
-            background: linear-gradient(to bottom, transparent, #8b5cf6, #3b82f6, transparent);
         }
         @media (max-width: 768px) {
             .timeline-line { left: 20px; }
@@ -126,10 +126,6 @@
             opacity: 1; 
             transform: translateY(0);
         }
-        .project-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            z-index: 10;
-        }
 
         /* Progress Bars */
         .progress-fill-bar {
@@ -141,8 +137,8 @@
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
         /* AI Chat styling */
-        .chat-bubble-user { background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; border-bottom-right-radius: 0; }
-        .chat-bubble-ai { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(139, 92, 246, 0.3); border-bottom-left-radius: 0; }
+        .chat-bubble-user { background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; border-bottom-right-radius: 0; }
+        .chat-bubble-ai { background: rgba(12, 12, 29, 0.85); border: 1px solid rgba(139, 92, 246, 0.25); border-bottom-left-radius: 0; }
 
         /* Flowing Gradient Text */
         .animate-gradient-text {
@@ -160,17 +156,17 @@
 
         /* Breathing Background Blobs */
         @keyframes pulse-slow {
-            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.2; }
-            50% { transform: scale(1.1) translate(20px, 20px); opacity: 0.35; }
+            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.25; }
+            50% { transform: scale(1.15) translate(30px, 15px); opacity: 0.4; }
         }
-        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
-        .animate-pulse-slow-delay { animation: pulse-slow 8s ease-in-out infinite; animation-delay: 4s; }
+        .animate-pulse-slow { animation: pulse-slow 10s ease-in-out infinite; }
+        .animate-pulse-slow-delay { animation: pulse-slow 10s ease-in-out infinite; animation-delay: 5s; }
         
         /* Bouncing Arrow */
         .animate-bounce-custom { animation: bounceCustom 2s infinite; }
         @keyframes bounceCustom {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-5px); }
+            40% { transform: translateY(-6px); }
             60% { transform: translateY(-3px); }
         }
 
@@ -182,7 +178,7 @@
 
         /* Enhanced Stat Card Glow */
         #dashboard .glass-panel:hover {
-            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.05);
         }
 
         /* 3D Tilt Utilities for Projects */
@@ -226,8 +222,8 @@
             position: absolute; bottom: -50%; left: -50%; width: 200%; height: 200%;
             background-size: 50px 50px;
             background-image: 
-                linear-gradient(to right, rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+                linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
             transform: perspective(500px) rotateX(60deg) translateY(0);
             animation: gridMove 20s linear infinite;
             z-index: 1;
@@ -261,14 +257,31 @@
             40% { clip: rect(88px, 9999px, 22px, 0); } 60% { clip: rect(34px, 9999px, 88px, 0); }
             80% { clip: rect(98px, 9999px, 11px, 0); } 100% { clip: rect(45px, 9999px, 66px, 0); }
         }
+
+        /* Animated Typing Dot Indicator */
+        .typing-indicator span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background-color: #06b6d4;
+            border-radius: 50%;
+            margin-right: 3px;
+            animation: bounceTyping 1.4s infinite both;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: .2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: .4s; }
+        @keyframes bounceTyping {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-purple selection:text-white">
 
     <!-- Background Gradients -->
     <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-purple rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-blue rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow-delay"></div>
+        <div class="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-brand-purple rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[45%] h-[45%] bg-brand-blue rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow-delay"></div>
     </div>
 
     <!-- Responsive Navigation -->
@@ -326,14 +339,14 @@
                 Samiksha Raj
             </h1>
             
-            <!-- THE TYPEWRITER BADGE (Directly below name, perfectly centered) -->
+            <!-- THE TYPEWRITER BADGE -->
             <div class="inline-flex items-center gap-3 px-6 py-2.5 glass-panel rounded-full mb-6 transform hover:-translate-y-1 transition-transform border border-brand-cyan/40 shadow-[0_0_20px_rgba(6,182,212,0.3)] z-20">
                 <span class="text-brand-cyan font-mono text-base md:text-lg font-bold">>_</span>
                 <span id="hero-typewriter" class="font-tech text-base md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue min-w-[150px] text-left"></span>
                 <span class="w-2.5 h-5 md:h-6 bg-brand-purple animate-pulse"></span>
             </div>
             
-            <!-- H2 SUBTITLE (Directly below the typewriter) -->
+            <!-- H2 SUBTITLE -->
             <h2 class="text-lg md:text-2xl font-light text-gray-400 mb-10 font-tech leading-relaxed max-w-3xl mx-auto">
                 Building Communities <span class="text-brand-purple hidden sm:inline">•</span><br class="sm:hidden"> 
                 Driving Innovation <span class="text-brand-blue hidden sm:inline">•</span><br class="sm:hidden"> 
@@ -348,6 +361,7 @@
         </div>
     </section>
 
+    <!-- Impact Dashboard -->
     <section id="dashboard" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 fade-up-element">
@@ -358,35 +372,45 @@
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto fade-up-element">
                 <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-brand-blue hover:-translate-y-2 transition-transform duration-300">
                     <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-calendar-check"></i></div>
-                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="20">0</div>
-                    <div class="text-brand-blue font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="flex items-center justify-center gap-0.5">
+                        <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="20">0</div>
+                        <div class="text-brand-blue font-bold text-lg md:text-xl">+</div>
+                    </div>
                     <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Events Organized</div>
                 </div>
                 
                 <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-brand-cyan hover:-translate-y-2 transition-transform duration-300">
                     <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-network-wired"></i></div>
-                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="3">0</div>
-                    <div class="text-brand-cyan font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="flex items-center justify-center gap-0.5">
+                        <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="3">0</div>
+                        <div class="text-brand-cyan font-bold text-lg md:text-xl">+</div>
+                    </div>
                     <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Communities</div>
                 </div>
 
                 <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-pink-500 hover:-translate-y-2 transition-transform duration-300">
                     <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-code-branch"></i></div>
-                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="10">0</div>
-                    <div class="text-pink-500 font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="flex items-center justify-center gap-0.5">
+                        <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="10">0</div>
+                        <div class="text-pink-500 font-bold text-lg md:text-xl">+</div>
+                    </div>
                     <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Projects Built</div>
                 </div>
 
                 <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-green-500 hover:-translate-y-2 transition-transform duration-300">
                     <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-laptop-code"></i></div>
-                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="50">0</div>
-                    <div class="text-green-500 font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="flex items-center justify-center gap-0.5">
+                        <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="50">0</div>
+                        <div class="text-green-500 font-bold text-lg md:text-xl">+</div>
+                    </div>
                     <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Hackathons</div>
                 </div>
             </div>
         </div>
     </section>
-     <section id="experience" class="py-24 relative z-10 bg-brand-dark/50 overflow-hidden">
+
+    <!-- Timeline Experience -->
+    <section id="experience" class="py-24 relative z-10 bg-brand-dark/50 overflow-hidden">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="mb-16 text-center md:text-left fade-up-element">
                 <h3 class="text-brand-purple font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Timeline</h3>
@@ -394,33 +418,47 @@
             </div>
             
             <div class="relative">
+                <!-- Vertical line: hidden on mobile, centered on desktop -->
                 <div class="timeline-line hidden md:block"></div>
                 
-                <!-- Gemini -->
+                <!-- 1. Google Gemini Student Ambassador (LEFT Side on Desktop) -->
                 <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16">
-                    <div class="hidden md:block w-5/12 text-right pr-8">
-                        <div class="text-brand-blue font-tech font-bold text-xl">Google</div>
-                        <div class="text-sm text-gray-400">Current Role</div>
-                    </div>
-                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-blue z-10 flex items-center justify-center timeline-dot">
-                        <i class="fas fa-star text-[10px] md:text-xs text-brand-blue"></i>
-                    </div>
-                    <div class="w-full md:w-5/12 pl-12 md:pl-8 timeline-content">
+                    <!-- Left side (Card) -->
+                    <div class="w-full md:w-5/12 md:pr-8 text-left md:text-right timeline-content">
                         <div class="glass-panel p-5 md:p-6 rounded-2xl">
                             <div class="md:hidden text-brand-blue font-tech font-bold text-lg mb-1">Google</div>
                             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Gemini Student Ambassador</h3>
                             <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">GID: 1186</p>
-                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
-                                <li><i class="fas fa-check text-brand-blue mr-2"></i> Spearheading AI product trials and feedback loops.</li>
-                                <li><i class="fas fa-check text-brand-blue mr-2"></i> Conducting workshops to democratize AI tools.</li>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm md:inline-block md:text-right">
+                                <li>Spearheading AI product trials and feedback loops. <i class="fas fa-check text-brand-blue ml-2 hidden md:inline"></i><i class="fas fa-check text-brand-blue mr-2 md:hidden"></i></li>
+                                <li>Conducting workshops to democratize AI tools. <i class="fas fa-check text-brand-blue ml-2 hidden md:inline"></i><i class="fas fa-check text-brand-blue mr-2 md:hidden"></i></li>
                             </ul>
                         </div>
                     </div>
+                    <!-- Center Dot -->
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-blue z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-star text-[10px] md:text-xs text-brand-blue"></i>
+                    </div>
+                    <!-- Right side (Label Spacer) -->
+                    <div class="hidden md:block w-5/12 pl-8 text-left">
+                        <div class="text-brand-blue font-tech font-bold text-xl">Google</div>
+                        <div class="text-sm text-gray-400">Current Role</div>
+                    </div>
                 </div>
 
-                <!-- PStud -->
-                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16 md:flex-row-reverse">
-                    <div class="w-full md:w-5/12 pl-12 md:pl-0 md:pr-8 text-left md:text-right timeline-content">
+                <!-- 2. PStud (RIGHT Side on Desktop) -->
+                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16">
+                    <!-- Left side (Label Spacer) -->
+                    <div class="hidden md:block w-5/12 text-right pr-8">
+                        <div class="text-brand-purple font-tech font-bold text-xl">PStud</div>
+                        <div class="text-sm text-gray-400">Startup</div>
+                    </div>
+                    <!-- Center Dot -->
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-purple z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-briefcase text-[10px] md:text-xs text-brand-purple"></i>
+                    </div>
+                    <!-- Right side (Card) -->
+                    <div class="w-full md:w-5/12 md:pl-8 timeline-content">
                         <div class="glass-panel p-5 md:p-6 rounded-2xl">
                             <div class="md:hidden text-brand-purple font-tech font-bold text-lg mb-1">PStud</div>
                             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Chief Operating Officer</h3>
@@ -432,41 +470,47 @@
                             <a href="https://pstud.netlify.app/" target="_blank" class="inline-block mt-4 text-[10px] md:text-xs font-tech text-brand-purple hover:text-white transition-colors border-b border-brand-purple pb-1">Visit Platform <i class="fas fa-external-link-alt ml-1"></i></a>
                         </div>
                     </div>
-                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-purple z-10 flex items-center justify-center timeline-dot">
-                        <i class="fas fa-briefcase text-[10px] md:text-xs text-brand-purple"></i>
-                    </div>
-                    <div class="hidden md:block w-5/12 pl-8 text-left">
-                        <div class="text-brand-purple font-tech font-bold text-xl">PStud</div>
-                        <div class="text-sm text-gray-400">Startup</div>
-                    </div>
                 </div>
 
-                <!-- StudEco -->
+                <!-- 3. StudEco (LEFT Side on Desktop) -->
                 <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16">
-                    <div class="hidden md:block w-5/12 text-right pr-8">
-                        <div class="text-brand-cyan font-tech font-bold text-xl">StudEco</div>
-                        <div class="text-sm text-gray-400">Startup</div>
-                    </div>
-                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-cyan z-10 flex items-center justify-center timeline-dot">
-                        <i class="fas fa-rocket text-[10px] md:text-xs text-brand-cyan"></i>
-                    </div>
-                    <div class="w-full md:w-5/12 pl-12 md:pl-8 timeline-content">
+                    <!-- Left side (Card) -->
+                    <div class="w-full md:w-5/12 md:pr-8 text-left md:text-right timeline-content">
                         <div class="glass-panel p-5 md:p-6 rounded-2xl">
                             <div class="md:hidden text-brand-cyan font-tech font-bold text-lg mb-1">StudEco</div>
                             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Chief Operating Officer</h3>
                             <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">Strategic Planning</p>
-                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
-                                <li><i class="fas fa-check text-brand-cyan mr-2"></i> Orchestrated strategic planning for ecosystem growth.</li>
-                                <li><i class="fas fa-check text-brand-cyan mr-2"></i> Fostered robust student engagement initiatives.</li>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm md:inline-block md:text-right">
+                                <li>Orchestrated strategic planning for ecosystem growth. <i class="fas fa-check text-brand-cyan ml-2 hidden md:inline"></i><i class="fas fa-check text-brand-cyan mr-2 md:hidden"></i></li>
+                                <li>Fostered robust student engagement initiatives. <i class="fas fa-check text-brand-cyan ml-2 hidden md:inline"></i><i class="fas fa-check text-brand-cyan mr-2 md:hidden"></i></li>
                             </ul>
                             <a href="https://studeco-in.netlify.app/" target="_blank" class="inline-block mt-4 text-[10px] md:text-xs font-tech text-brand-cyan hover:text-white transition-colors border-b border-brand-cyan pb-1">Visit Platform <i class="fas fa-external-link-alt ml-1"></i></a>
                         </div>
                     </div>
+                    <!-- Center Dot -->
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-cyan z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-rocket text-[10px] md:text-xs text-brand-cyan"></i>
+                    </div>
+                    <!-- Right side (Label Spacer) -->
+                    <div class="hidden md:block w-5/12 pl-8 text-left">
+                        <div class="text-brand-cyan font-tech font-bold text-xl">StudEco</div>
+                        <div class="text-sm text-gray-400">Startup</div>
+                    </div>
                 </div>
                 
-                <!-- Education -->
+                <!-- 4. Education (RIGHT Side on Desktop) -->
                 <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full">
-                    <div class="w-full md:w-5/12 pl-12 md:pl-0 md:pr-8 text-left md:text-right timeline-content md:flex-row-reverse">
+                    <!-- Left side (Label Spacer) -->
+                    <div class="hidden md:block w-5/12 text-right pr-8">
+                        <div class="text-gray-400 font-tech font-bold text-xl">2024 - Present</div>
+                        <div class="text-sm text-gray-500">Education</div>
+                    </div>
+                    <!-- Center Dot -->
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-gray-500 z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-university text-[10px] md:text-xs text-gray-400"></i>
+                    </div>
+                    <!-- Right side (Card) -->
+                    <div class="w-full md:w-5/12 md:pl-8 timeline-content">
                         <div class="glass-panel p-5 md:p-6 rounded-2xl">
                             <div class="md:hidden text-gray-400 font-tech font-bold text-lg mb-1">2024 - Present</div>
                             <h3 class="text-xl md:text-2xl font-bold text-white mb-1">B.Tech CSE</h3>
@@ -477,18 +521,12 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-gray-500 z-10 flex items-center justify-center timeline-dot">
-                        <i class="fas fa-university text-[10px] md:text-xs text-gray-400"></i>
-                    </div>
-                    <div class="hidden md:block w-5/12 pl-8 text-left">
-                        <div class="text-gray-400 font-tech font-bold text-xl">2024 - Present</div>
-                        <div class="text-sm text-gray-500">Education</div>
-                    </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Shipped Products -->
     <section id="projects" class="py-24 relative z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-white/10 pb-6 fade-up-element">
@@ -582,10 +620,11 @@
         </div>
     </section>
 
+    <!-- Capabilities -->
     <section id="skills" class="py-24 relative z-10 bg-brand-dark/50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <!-- Skills Orbit (Static and Centered for readability) -->
+            <!-- Skills Orbit -->
             <div class="flex flex-col items-center text-center w-full mb-24 fade-up-element">
                 <h3 class="text-brand-purple font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Capabilities</h3>
                 <h2 class="text-3xl md:text-4xl font-tech font-bold text-white mb-10">Skill Universe</h2>
@@ -595,7 +634,7 @@
                 </div>
             </div>
 
-            <!-- ENHANCED EXPLICIT PROGRESS BARS FOR ALL SKILLS -->
+            <!-- Technical Progress Bars -->
             <div class="w-full mb-32 fade-up-element">
                 <h3 class="text-center text-brand-cyan font-tech mb-8 md:mb-12 uppercase tracking-widest flex items-center justify-center gap-3 text-sm md:text-lg">
                     <i class="fas fa-layer-group"></i> Technical Arsenal
@@ -689,6 +728,7 @@
                 </div>
             </div>
 
+            <!-- Milestones Achievements -->
             <div class="flex flex-col items-center text-center w-full fade-up-element">
                 <h3 class="text-brand-blue font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Milestones</h3>
                 <h2 class="text-3xl md:text-4xl font-tech font-bold text-white mb-8 md:mb-10">Achievements</h2>
@@ -720,44 +760,67 @@
         </div>
     </section>
 
+    <!-- Ask Samiksha AI (Powered by Gemini) -->
     <section id="ai" class="py-24 relative z-10">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 fade-up-element">
             <div class="glass-panel rounded-3xl p-1 relative overflow-hidden shadow-2xl">
-                <div class="absolute inset-0 bg-gradient-to-r from-brand-purple via-brand-blue to-brand-cyan opacity-20 blur-xl z-0"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-purple via-brand-blue to-brand-cyan opacity-25 blur-xl z-0"></div>
                 <div class="relative z-10 bg-brand-card rounded-[22px] p-5 md:p-10 border border-white/10">
-                    <div class="flex items-center justify-between mb-6 md:mb-8 pb-4 border-b border-white/10">
+                    
+                    <div class="flex items-center justify-between mb-4 pb-4 border-b border-white/10">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center text-white">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center text-white shadow-[0_0_15px_rgba(139,92,246,0.5)]">
                                 <i class="fas fa-robot"></i>
                             </div>
                             <div>
-                                <h3 class="text-lg md:text-xl font-tech font-bold text-white">Ask Samiksha AI</h3>
-                                <p class="text-[10px] md:text-xs text-brand-cyan">Powered by Portfolio Data</p>
+                                <h3 class="text-lg md:text-xl font-tech font-bold text-white flex items-center gap-2">Ask Samiksha AI</h3>
+                                <p id="ai-subtitle" class="text-[10px] md:text-xs text-brand-cyan">Zero-Key Autopilot Mode Enabled</p>
                             </div>
                         </div>
-                        <div class="flex gap-2 items-center">
-                            <div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500 animate-pulse"></div>
-                            <span class="text-[10px] md:text-xs font-tech text-gray-400 uppercase tracking-widest hidden sm:block">Online</span>
+                        <div class="flex gap-4 items-center">
+                            <!-- Toggle API Key configuration -->
+                            <button id="toggle-key-btn" class="text-gray-400 hover:text-brand-purple transition-colors p-1" title="Configure API Key">
+                                <i class="fas fa-key text-xs md:text-sm"></i>
+                            </button>
+                            <div class="flex gap-1.5 items-center">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="text-[10px] font-tech text-gray-400 uppercase tracking-widest hidden sm:block">Online</span>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Secure Client API Panel (hidden by default) -->
+                    <div id="api-panel" class="hidden mb-6 p-4 bg-black/60 border border-brand-purple/30 rounded-xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <label class="text-xs font-tech text-gray-300 font-semibold uppercase tracking-wider">Configure Gemini API Key</label>
+                            <span class="text-[10px] font-mono text-gray-500">Stored safely in browser storage</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="password" id="api-key-input" placeholder="Paste your Gemini API key (AIzaSy...)" class="flex-grow bg-brand-dark border border-white/10 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-brand-purple">
+                            <button id="save-key-btn" class="px-4 py-2 bg-brand-purple hover:bg-brand-blue text-xs font-tech font-bold text-white rounded-lg transition-colors">Save</button>
+                        </div>
+                        <p class="text-[10px] text-gray-400 leading-relaxed">
+                            If no API Key is provided, the chatbot falls back onto Samiksha's ultra-responsive local matching engine. Enter a custom key to query anything beyond her portfolio!
+                        </p>
+                    </div>
                     
-                    <div class="h-48 md:h-64 overflow-y-auto mb-6 pr-2 space-y-4" id="chat-box">
+                    <div class="h-64 md:h-80 overflow-y-auto mb-6 pr-2 space-y-4 font-sans text-sm" id="chat-box">
                         <div class="flex flex-col items-start">
                             <div class="chat-bubble-ai px-4 py-3 rounded-2xl max-w-[90%] md:max-w-[85%] text-xs md:text-sm text-gray-200">
-                                Hello! I'm an AI assistant trained on Samiksha's portfolio. You can ask me things like:<br>
+                                Hello! I'm Samiksha's specialized AI representative. Ask me anything about her career, projects, leadership experiences, or tech stack! Try choosing one of these ideas:<br>
                                 <ul class="list-disc ml-4 md:ml-5 mt-2 text-brand-cyan space-y-1">
-                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What does Samiksha do?')">What does Samiksha do?</li>
-                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What projects has she worked on?')">What projects has she worked on?</li>
-                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What are her skills?')">What are her skills?</li>
+                                    <li class="cursor-pointer hover:underline" onclick="clickSuggestion('What is Samiksha\'s role as Gemini Student Ambassador?')">What is Samiksha's role as Gemini Student Ambassador?</li>
+                                    <li class="cursor-pointer hover:underline" onclick="clickSuggestion('Tell me about PStud and StudEco startups')">Tell me about PStud and StudEco startups</li>
+                                    <li class="cursor-pointer hover:underline" onclick="clickSuggestion('What are her key technical skills and projects?')">What are her key technical skills and projects?</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     
                     <form id="ai-form" class="relative">
-                        <input type="text" id="ai-input" placeholder="Type your question..." class="w-full bg-black/50 border border-white/20 rounded-xl py-3 md:py-4 pl-4 pr-12 md:pr-14 text-white focus:outline-none focus:border-brand-purple transition-colors font-tech text-sm md:text-base">
-                        <button type="submit" class="absolute right-2 top-2 bottom-2 w-10 bg-brand-purple rounded-lg text-white hover:bg-brand-blue transition-colors flex items-center justify-center">
-                            <i class="fas fa-paper-plane"></i>
+                        <input type="text" id="ai-input" autocomplete="off" placeholder="Type your question..." class="w-full bg-black/60 border border-white/20 rounded-xl py-3 md:py-4 pl-4 pr-12 md:pr-14 text-white focus:outline-none focus:border-brand-purple transition-colors font-tech text-sm md:text-base">
+                        <button type="submit" id="ai-send-btn" class="absolute right-2 top-2 bottom-2 w-10 bg-brand-purple rounded-lg text-white hover:bg-brand-blue transition-colors flex items-center justify-center">
+                            <i class="fas fa-paper-plane" id="ai-btn-icon"></i>
                         </button>
                     </form>
                 </div>
@@ -765,6 +828,7 @@
         </div>
     </section>
 
+    <!-- Connect Terminal -->
     <section id="contact" class="py-24 relative z-10 border-t border-white/5">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-up-element">
             <div class="bg-[#0f0f15] border border-gray-800 rounded-xl overflow-hidden shadow-2xl mx-auto text-left max-w-2xl transform transition-transform hover:scale-[1.01] duration-300">
@@ -791,8 +855,8 @@
                         <a href="https://github.com/SamikshaaSingh" target="_blank" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
                             <i class="fab fa-github mr-2"></i> GitHub
                         </a>
-                        <a href="tel:+919341473288" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
-                            <i class="fas fa-phone-alt mr-2"></i> Phone
+                        <a href="#contact" onclick="clickSuggestion('How can I schedule a discovery meeting with Samiksha?')" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
+                            <i class="fas fa-calendar-alt mr-2"></i> Schedule Meet
                         </a>
                     </div>
                 </div>
@@ -804,6 +868,7 @@
         &copy; <span id="year"></span> Samiksha Raj. All systems operational.
     </footer>
 
+    <!-- Interactive JS Scripts -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -812,83 +877,115 @@
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = mobileMenu.querySelectorAll('a');
 
-        mobileMenuBtn.addEventListener('click', () => {
+        mobileMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             mobileMenu.classList.toggle('hidden');
         });
 
+        // Close menu when clicking links
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.add('hidden');
             });
         });
 
-        // --- Performance-Optimized Particle Background ---
+        // Close menu when clicking outside of it
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && e.target !== mobileMenuBtn) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // --- Particle Background Canvas ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
         
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resizeCanvas() { 
+            canvas.width = window.innerWidth; 
+            canvas.height = window.innerHeight; 
+        }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class Particle {
             constructor() {
-                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25;
+                this.x = Math.random() * canvas.width; 
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5; 
+                this.speedX = Math.random() * 0.4 - 0.2; 
+                this.speedY = Math.random() * 0.4 - 0.2;
             }
             update() {
-                this.x += this.speedX; this.y += this.speedY;
+                this.x += this.speedX; 
+                this.y += this.speedY;
                 if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
                 if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
             }
             draw() {
-                ctx.fillStyle = 'rgba(139, 92, 246, 0.5)'; ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+                ctx.fillStyle = 'rgba(139, 92, 246, 0.45)'; 
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                ctx.fill();
             }
         }
 
         function initParticles() {
             particles = []; 
-            let numParticles = window.innerWidth < 768 ? 40 : (canvas.width * canvas.height) / 15000;
+            let numParticles = window.innerWidth < 768 ? 45 : (canvas.width * canvas.height) / 14000;
+            if (numParticles > 120) numParticles = 120; // Protect performance
             for (let i = 0; i < numParticles; i++) particles.push(new Particle());
         }
 
-        let mouse = { x: null, y: null, radius: 150 };
+        let mouse = { x: null, y: null, radius: 140 };
         window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x; mouse.y = event.y;
+            mouse.x = event.clientX; 
+            mouse.y = event.clientY;
         });
         window.addEventListener('mouseout', function() {
-            mouse.x = null; mouse.y = null;
+            mouse.x = null; 
+            mouse.y = null;
         });
 
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
-                particles[i].update(); particles[i].draw();
+                particles[i].update(); 
+                particles[i].draw();
                 
                 if (mouse.x != null) {
-                    let dx = particles[i].x - mouse.x; let dy = particles[i].y - mouse.y;
+                    let dx = particles[i].x - mouse.x; 
+                    let dy = particles[i].y - mouse.y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < mouse.radius) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/mouse.radius})`;
-                        ctx.lineWidth = 1.5; ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                        ctx.beginPath(); 
+                        ctx.strokeStyle = `rgba(139, 92, 246, ${0.4 * (1 - distance / mouse.radius)})`;
+                        ctx.lineWidth = 1; 
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y); 
+                        ctx.stroke();
                     }
                 }
-                let maxDist = window.innerWidth < 768 ? 70 : 100;
-                for (let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x; let dy = particles[i].y - particles[j].y;
+
+                let maxDist = window.innerWidth < 768 ? 65 : 95;
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x; 
+                    let dy = particles[i].y - particles[j].y;
                     let distance = Math.sqrt(dx * dx + dy * dy);
                     if (distance < maxDist) {
-                        ctx.beginPath(); ctx.strokeStyle = `rgba(59, 130, 246, ${1 - distance/maxDist})`;
-                        ctx.lineWidth = 0.5; ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                        ctx.beginPath(); 
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${0.35 * (1 - distance / maxDist)})`;
+                        ctx.lineWidth = 0.5; 
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y); 
+                        ctx.stroke();
                     }
                 }
             }
             requestAnimationFrame(animateParticles);
         }
-        initParticles(); animateParticles();
+        initParticles(); 
+        animateParticles();
 
         // --- Generic Scroll Reveal Observer ---
         const fadeElements = document.querySelectorAll('.fade-up-element');
@@ -905,13 +1002,19 @@
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
                     const target = +entry.target.getAttribute('data-target');
-                    let count = 0; const increment = target / 50;
+                    let count = 0; 
+                    const increment = target / 50;
                     const updateCount = () => {
                         count += increment;
-                        if(count < target) { entry.target.innerText = Math.ceil(count); setTimeout(updateCount, 20); }
-                        else { entry.target.innerText = target; }
+                        if(count < target) { 
+                            entry.target.innerText = Math.ceil(count); 
+                            setTimeout(updateCount, 25); 
+                        } else { 
+                            entry.target.innerText = target; 
+                        }
                     };
-                    updateCount(); observer.unobserve(entry.target);
+                    updateCount(); 
+                    observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.5 });
@@ -935,22 +1038,21 @@
         }, { threshold: 0.1 });
         projectCards.forEach(card => projectObserver.observe(card));
 
-        // --- STREAMING_CHUNK:Configuring skill orbit and interaction observers ---
-        // --- Responsive Static Skill Orbit ---
+        // --- Responsive Static Skill Orbit System ---
         const orbitSystem = document.getElementById('orbit-system');
-        const skills = ['Leadership', 'Public Speaking', 'Event Mgmt', 'Community', 'Entrepreneurship', 'Content', 'AI Tools', 'Strategy'];
+        const skills = ['Leadership', 'Public Speaking', 'Event Mgmt', 'Community', 'Entrepreneurship', 'Content Strategy', 'AI Tools', 'Growth Execution'];
         
         function renderOrbit() {
             if(!orbitSystem) return;
             orbitSystem.innerHTML = `
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue p-1 shadow-[0_0_30px_rgba(139,92,246,0.5)] z-20">
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue p-1 shadow-[0_0_35px_rgba(139,92,246,0.55)] z-20">
                     <div class="w-full h-full bg-brand-card rounded-full flex items-center justify-center font-tech font-bold text-white text-center leading-tight text-xs md:text-base">
                         Samiksha<br>Raj
                     </div>
                 </div>
             `;
             
-            const radius = window.innerWidth < 640 ? 110 : 160;
+            const radius = window.innerWidth < 640 ? 110 : 165;
             
             skills.forEach((skill, index) => {
                 const angle = (index / skills.length) * (2 * Math.PI);
@@ -985,38 +1087,268 @@
         }, { threshold: 0.1 });
         progressBars.forEach(bar => progressObserver.observe(bar));
 
-        // --- Ask AI Logic ---
-        const aiForm = document.getElementById('ai-form'); const aiInput = document.getElementById('ai-input');
+        // --- Ask Samiksha AI Logic With Live Gemini Model & Exponential Backoff ---
+        const aiForm = document.getElementById('ai-form'); 
+        const aiInput = document.getElementById('ai-input');
         const chatBox = document.getElementById('chat-box');
-        function fillInput(text) { aiInput.value = text; aiInput.focus(); }
-        const aiResponses = {
-            'do': 'I am the COO of PStud and StudEco, a Google Gemini Student Ambassador, and a B.Tech CSE student at Sarala Birla University. I specialize in community building and frontend development.',
-            'project': 'I have worked on several cool projects! "SafeId" is a Web3 dApp for identity backup, "Campus Bite" is a fullstack food ordering app, and I lead campaigns like "Dream Career with Gemini".',
-            'skill': 'My core skills include Leadership, Event Management, Community Building, and AI Tools. Technically, I work with Python, JavaScript, HTML/CSS, PHP, and MySQL.',
-            'contact': 'You can reach me via email at samiksharaj07@gmail.com, or call me at +919341473288. Also, feel free to connect on LinkedIn!',
-            'default': "That's an interesting question! While I'm just a simple AI representation of Samiksha's portfolio, you can find most of my professional details scrolling through this dashboard, or you can contact me directly at samiksharaj07@gmail.com!"
-        };
-        function addMessage(text, isUser) {
-            const div = document.createElement('div'); div.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'} mb-4`;
-            const bubble = document.createElement('div'); bubble.className = `px-4 py-3 rounded-2xl max-w-[85%] text-xs md:text-sm ${isUser ? 'chat-bubble-user' : 'chat-bubble-ai text-gray-200'}`;
-            bubble.innerText = text; div.appendChild(bubble); chatBox.appendChild(div); chatBox.scrollTop = chatBox.scrollHeight;
+        const aiSendBtn = document.getElementById('ai-send-btn');
+        const aiBtnIcon = document.getElementById('ai-btn-icon');
+        const toggleKeyBtn = document.getElementById('toggle-key-btn');
+        const apiPanel = document.getElementById('api-panel');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveKeyBtn = document.getElementById('save-key-btn');
+        const aiSubtitle = document.getElementById('ai-subtitle');
+
+        function fillInput(text) { 
+            aiInput.value = text; 
+            aiInput.focus(); 
         }
-        aiForm.addEventListener('submit', (e) => {
-            e.preventDefault(); const val = aiInput.value.trim(); if(!val) return;
-            addMessage(val, true); aiInput.value = '';
+
+        function clickSuggestion(text) {
+            fillInput(text);
             setTimeout(() => {
-                const lowerVal = val.toLowerCase(); let response = aiResponses['default'];
-                if (lowerVal.includes('do') || lowerVal.includes('who') || lowerVal.includes('about')) response = aiResponses['do'];
-                else if (lowerVal.includes('project') || lowerVal.includes('work') || lowerVal.includes('build')) response = aiResponses['project'];
-                else if (lowerVal.includes('skill') || lowerVal.includes('tech') || lowerVal.includes('know')) response = aiResponses['skill'];
-                else if (lowerVal.includes('contact') || lowerVal.includes('email') || lowerVal.includes('phone')) response = aiResponses['contact'];
-                addMessage(response, false);
-            }, 800);
+                aiForm.requestSubmit();
+            }, 100);
+        }
+
+        // Initialize API config states
+        let customApiKey = localStorage.getItem('samiksha_gemini_key') || "";
+        if (customApiKey) {
+            apiKeyInput.value = customApiKey;
+            aiSubtitle.innerText = "Custom Live Key Active";
+            aiSubtitle.classList.replace('text-brand-cyan', 'text-green-400');
+        }
+
+        toggleKeyBtn.addEventListener('click', () => {
+            apiPanel.classList.toggle('hidden');
         });
 
-        // --- STREAMING_CHUNK:Finalizing UI interactions and terminal behavior ---
-        // --- Terminal Animation Mobile Fix ---
-        const terminalSection = document.getElementById('contact'); let terminalPlayed = false;
+        saveKeyBtn.addEventListener('click', () => {
+            const keyVal = apiKeyInput.value.trim();
+            localStorage.setItem('samiksha_gemini_key', keyVal);
+            customApiKey = keyVal;
+            apiPanel.classList.add('hidden');
+            if (keyVal) {
+                aiSubtitle.innerText = "Custom Live Key Active";
+                aiSubtitle.classList.replace('text-brand-cyan', 'text-green-400');
+            } else {
+                aiSubtitle.innerText = "Zero-Key Autopilot Mode Enabled";
+                aiSubtitle.classList.replace('text-green-400', 'text-brand-cyan');
+            }
+        });
+
+        // Offline / Client-Side NLP Local Autopilot Engine (Prevents timeout/fetching errors when no API key is specified)
+        function generateLocalResponse(query) {
+            const normalized = query.toLowerCase();
+            
+            // 1. Google Gemini Student Ambassador
+            if (normalized.includes('google') || normalized.includes('gemini') || normalized.includes('ambassador') || normalized.includes('gid')) {
+                return "As a **Google Gemini Student Ambassador (GID: 1186)**, Samiksha leads advanced AI product trials, structures user feedback pipelines, and conducts campus workshops to democratize advanced AI developer interfaces. She also spearheads interactive reels and campaigns such as *'Dream Career with Gemini'* to guide students on optimizing generative workflows.";
+            }
+            
+            // 2. Startups COO Roles (PStud & StudEco)
+            if (normalized.includes('pstud') || normalized.includes('studeco') || normalized.includes('coo') || normalized.includes('startup') || normalized.includes('business')) {
+                return "Samiksha is an experienced operational leader who has run execution tracks as **Chief Operating Officer (COO)** for two distinct startups:<br><br>" +
+                       "• **PStud** ([pstud.netlify.app](https://pstud.netlify.app/)): Wrote growth strategies, scaled student engagement indexes, and managed core operational divisions.<br>" +
+                       "• **StudEco** ([studeco-in.netlify.app](https://studeco-in.netlify.app/)): Engineered expansion pipelines, coordinated cross-functional execution metrics, and promoted ecosystem development.";
+            }
+
+            // 3. Projects Portfolio (SafeID, Campus Bite, Assignments)
+            if (normalized.includes('project') || normalized.includes('build') || normalized.includes('work') || normalized.includes('safeid') || normalized.includes('campus bite')) {
+                return "Here are Samiksha's primary technical achievements and products:<br><br>" +
+                       "• **SafeId** ([safeidd.netlify.app](https://safeidd.netlify.app/)): A decentralized Web3 backup platform leveraging **IPFS** for secure file storage and **Polygon** for secure verification protocol execution.<br>" +
+                       "• **Campus Bite**: A 3-tier ordering platform integrating a fully structured web dashboard built with **PHP and MySQL**, validating user SBUIDs using complex SQL procedures and stored conditions.<br>" +
+                       "• **Campaigns**: Dynamic content operations like *'Dream Career with Gemini'* to train student engineers on effective prompting.";
+            }
+
+            // 4. Tech Stack / Skills
+            if (normalized.includes('skill') || normalized.includes('tech') || normalized.includes('stack') || normalized.includes('language') || normalized.includes('know') || normalized.includes('code')) {
+                return "Samiksha's balanced technical stack consists of:<br><br>" +
+                       "• **Frontend UI/UX**: HTML5, CSS3, JavaScript, Tailwind CSS (Visual Styling)<br>" +
+                       "• **Backend & DB**: Python, Node.js, PHP, MySQL (Relational Stored Procedures)<br>" +
+                       "• **Core Systems**: C/C++, Data Structures, Algorithm Optimization<br>" +
+                       "• **Web3 Decentralization**: Solidity basics, IPFS, Polygon Network Integrations<br>" +
+                       "• **Execution Tools**: Generative AI tools and platform management.";
+            }
+
+            // 5. Connect / Schedule / Meeting / Contact
+            if (normalized.includes('contact') || normalized.includes('email') || normalized.includes('linkedin') || normalized.includes('reach') || normalized.includes('connect') || normalized.includes('schedule') || normalized.includes('meeting')) {
+                return "You can securely connect and set up discovery pipelines with Samiksha via her primary communication hubs:<br><br>" +
+                       "• **LinkedIn**: <a href='https://www.linkedin.com/in/samiksharaj' target='_blank' class='text-brand-cyan hover:underline'>linkedin.com/in/samiksharaj</a><br>" +
+                       "• **Email**: <a href='mailto:samiksharaj07@gmail.com' class='text-brand-cyan hover:underline'>samiksharaj07@gmail.com</a><br>" +
+                       "• **GitHub**: <a href='https://github.com/SamikshaaSingh' target='_blank' class='text-brand-cyan hover:underline'>github.com/SamikshaaSingh</a><br><br>" +
+                       "You can also activate her **Terminal Links** at the bottom of the page to schedule live calendar invites!";
+            }
+
+            // 6. Default fallback response
+            return "That's a great question! As Samiksha's AI, I can tell you she's a CSE student at SBU Ranchi, double startup COO, and Gemini Student Ambassador. If you would like to run completely dynamic conversational requests, you can paste a free Gemini API Key in the settings icon on the chat bar above!";
+        }
+
+        // Persona context details injected dynamically as system instruction
+        const samikshaPersonaContext = `You are the dynamic AI Assistant representing Samiksha Raj, a tech entrepreneur, student founder, and software developer.
+Answer questions representing her profile professionally, engagingly, and concisely. Keep responses tech-forward, matching her active and ambitious tone.
+
+Professional Background & Experience:
+- Google Gemini Student Ambassador (GID: 1186): Currently spearheading AI trials, organizing tech campaigns, and conducting educational developer workshops.
+- Chief Operating Officer (COO) of PStud (pstud.netlify.app): Drove strategic business operations, software design, and massive student community engagement.
+- Chief Operating Officer (COO) of StudEco (studeco-in.netlify.app): Masterminded business operations, planned student ecosystem expansions, and structured strategic operations.
+- Education: Pursuing a B.Tech in Computer Science and Engineering (CSE) at Sarala Birla University, Ranchi (2024 - Present). Focuses on Core Computer Science, Web3, and Frontend development.
+
+Projects Highlights:
+- SafeId (safeidd.netlify.app): Led a decentralized Web3 dApp for encrypted identity backup utilizing IPFS storage and validation built on Polygon.
+- Campus Bite: Formulated a 3-tier responsive food ordering database system utilizing PHP and robust MySQL stored procedures with complex logic.
+- Content Campaigns: Strategic campaign execution on Instagram/LinkedIn, like "Dream Career with Gemini", aimed at helping students utilize Generative AI for careers.
+
+Capabilities & Skills:
+- Technical Skills: HTML, CSS, JavaScript, PHP, MySQL, Python, Node.js, C/C++, algorithm analysis.
+- Leadership & Professional: Public Speaking, Start-up Scaling, Operations Management, Community Building, Event Architecture, Content Production.
+
+Contact & Connections:
+- LinkedIn: linkedin.com/in/samiksharaj
+- GitHub: github.com/SamikshaaSingh
+- Email: samiksharaj07@gmail.com
+- Scheduling: Users can schedule discovery calls or meetings directly on her Calendly/Calendar portal linked inside her dashboard (Connect terminal).
+
+Reply Format Rules:
+1. Always keep answers concise, helpful, and under 4-5 sentences unless they explicitly ask for project details.
+2. If user inquires about contacting, directly share her Email/LinkedIn details.
+3. Be friendly and maintain professional confidence. Do not write markdown titles like # or ##. Use simple bolding and lists for cleanliness.`;
+
+        // Resilience Fetching Wrapper (Exponential Backoff up to 5 times)
+        async function fetchGeminiWithBackoff(url, requestOptions, retries = 5, delay = 1000) {
+            try {
+                const response = await fetch(url, requestOptions);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return await response.json();
+            } catch (error) {
+                if (retries > 0) {
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return fetchGeminiWithBackoff(url, requestOptions, retries - 1, delay * 2);
+                }
+                throw error;
+            }
+        }
+
+        // Clean parser that renders Gemini Markdown bolding, lists, and spacing beautifully inside glass bubbles
+        function formatMarkdownResponse(text) {
+            let clean = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+
+            // Convert lists
+            clean = clean.replace(/^\s*[\-\*]\s+(.*)$/gm, '<li class="ml-4 list-disc mt-1 text-gray-300">$1</li>');
+            
+            if (clean.includes('<li')) {
+                clean = clean.replace(/(<li[\s\S]*?<\/li>)/g, '<ul class="my-2">$1</ul>');
+            }
+
+            // Convert **bold** to strong
+            clean = clean.replace(/\*\*(.*?)\*\"/g, '<strong class="text-brand-cyan font-semibold">$1</strong>');
+
+            // Convert newlines to breaks
+            clean = clean.replace(/\n/g, '<br>');
+
+            return clean;
+        }
+
+        function appendMessage(text, isUser) {
+            const div = document.createElement('div'); 
+            div.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'} mb-4`;
+            const bubble = document.createElement('div'); 
+            bubble.className = `px-4 py-3 rounded-2xl max-w-[85%] text-xs md:text-sm ${isUser ? 'chat-bubble-user' : 'chat-bubble-ai text-gray-200'}`;
+            
+            if (isUser) {
+                bubble.innerText = text;
+            } else {
+                bubble.innerHTML = formatMarkdownResponse(text);
+            }
+            
+            div.appendChild(bubble); 
+            chatBox.appendChild(div); 
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return div;
+        }
+
+        aiForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); 
+            const question = aiInput.value.trim(); 
+            if(!question) return;
+
+            appendMessage(question, true); 
+            aiInput.value = '';
+
+            // Add typing indicator bubble
+            const typingBubble = document.createElement('div');
+            typingBubble.className = "flex flex-col items-start mb-4";
+            typingBubble.innerHTML = `
+                <div class="chat-bubble-ai px-4 py-3 rounded-2xl flex items-center gap-1">
+                    <div class="typing-indicator flex items-center">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            chatBox.appendChild(typingBubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Set Loading States
+            aiSendBtn.disabled = true;
+            aiBtnIcon.className = "fas fa-spinner animate-spin";
+
+            // If there's NO API key specified, instantly leverage client-side responsive matching.
+            // This is robust, fast, and completely immune to client-side CORS or configuration timeouts.
+            if (!customApiKey) {
+                setTimeout(() => {
+                    typingBubble.remove();
+                    const answerText = generateLocalResponse(question);
+                    appendMessage(answerText, false);
+                    aiSendBtn.disabled = false;
+                    aiBtnIcon.className = "fas fa-paper-plane";
+                }, 750);
+                return;
+            }
+
+            // Otherwise, route requests over to Google API gateway using custom Key configurations
+            const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${customApiKey}`;
+            
+            const payload = {
+                contents: [
+                    { parts: [{ text: question }] }
+                ],
+                systemInstruction: {
+                    parts: [{ text: samikshaPersonaContext }]
+                }
+            };
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            };
+
+            try {
+                const data = await fetchGeminiWithBackoff(endpoint, requestOptions);
+                typingBubble.remove(); // Clear indicator
+
+                const answerText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I was unable to retrieve a response right now. Please try again soon!";
+                appendMessage(answerText, false);
+            } catch (err) {
+                typingBubble.remove();
+                // Graceful rollback to offline responsive matching engine on any API gateway configuration errors.
+                const fallbackAnswer = generateLocalResponse(question);
+                appendMessage(fallbackAnswer, false);
+            } finally {
+                aiSendBtn.disabled = false;
+                aiBtnIcon.className = "fas fa-paper-plane";
+            }
+        });
+
+        // --- Terminal Animation Behavior ---
+        const terminalSection = document.getElementById('contact'); 
+        let terminalPlayed = false;
+        
         const terminalObserver = new IntersectionObserver((entries) => {
             if(entries[0].isIntersecting && !terminalPlayed) {
                 terminalPlayed = true; 
@@ -1027,26 +1359,26 @@
                 const cursor = document.querySelector('.cursor-blink');
                 
                 line1.classList.remove('hidden'); 
-                const cmd = "connect --with samiksha"; let i = 0;
+                const cmd = "connect --with samiksha"; 
+                let i = 0;
                 
                 const typeWriter = setInterval(() => {
                     if (i < cmd.length) { 
                         textSpan.innerHTML += cmd.charAt(i); i++; 
                     } else {
-                        clearInterval(typeWriter); cursor.style.display = 'none';
+                        clearInterval(typeWriter); 
+                        cursor.style.display = 'none';
                         setTimeout(() => { 
                             line2.classList.remove('hidden'); 
-                            setTimeout(() => { links.classList.remove('hidden'); }, 400); 
-                        }, 500);
+                            setTimeout(() => { links.classList.remove('hidden'); }, 300); 
+                        }, 400);
                     }
-                }, 80); 
+                }, 75); 
             }
         }, { threshold: 0.1 }); 
         terminalObserver.observe(terminalSection);
 
-        // --- NEW PREMIUM JS ANIMATIONS ---
-
-        // 1. 3D Tilt Effect for Project Cards
+        // --- Dynamic Tilt on Project Cards ---
         const projectTiltCards = document.querySelectorAll('.project-card');
         projectTiltCards.forEach(card => {
             card.addEventListener('mousemove', e => {
@@ -1056,8 +1388,8 @@
                 const centerX = rect.width / 2;
                 const centerY = rect.height / 2;
                 
-                const rotateX = ((y - centerY) / centerY) * -12;
-                const rotateY = ((x - centerX) / centerX) * 12;
+                const rotateX = ((y - centerY) / centerY) * -10;
+                const rotateY = ((x - centerX) / centerX) * 10;
                 
                 card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
                 card.style.transition = 'none'; 
@@ -1071,21 +1403,21 @@
             });
         });
 
-        // 2. Dynamic Glass Navbar on Scroll
+        // --- Dynamic Glass Navbar Adjustments on Scroll ---
         const navBar = document.querySelector('nav');
-        const navContainer = navBar.querySelector('.h-20, .h-16');
+        const navContainer = navBar.querySelector('.flex.justify-between');
         if(navContainer) navContainer.classList.add('transition-all', 'duration-300');
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
+            if (window.scrollY > 40) {
                 navBar.style.background = 'rgba(5, 5, 15, 0.9)';
-                navBar.style.boxShadow = '0 10px 30px -10px rgba(139, 92, 246, 0.3)';
+                navBar.style.boxShadow = '0 10px 30px -10px rgba(139, 92, 246, 0.35)';
                 if(navContainer) {
                     navContainer.classList.remove('h-20');
                     navContainer.classList.add('h-16');
                 }
             } else {
-                navBar.style.background = 'rgba(12, 12, 29, 0.6)';
+                navBar.style.background = 'rgba(12, 12, 29, 0.60)';
                 navBar.style.boxShadow = 'none';
                 if(navContainer) {
                     navContainer.classList.remove('h-16');
@@ -1094,7 +1426,7 @@
             }
         });
 
-        // 3. Spotlight Hover Tracker for all Glass Panels
+        // --- Mouse Tracker Spotlight Config ---
         const glassPanels = document.querySelectorAll('.glass-panel');
         glassPanels.forEach(panel => {
             panel.addEventListener('mousemove', e => {
@@ -1107,8 +1439,8 @@
             });
         });
 
-        // 4. Hero Typewriter Effect
-        const heroWords = ["A Student", "Tech Enthusiast", "Software Engineer", "Full Stack Developer"];
+        // --- Hero Typewriter Animation ---
+        const heroWords = ["Startup Founder", "Software Engineer", "Full Stack Developer", "Community Builder"];
         let heroWordIndex = 0;
         let heroCharIndex = 0;
         let isHeroDeleting = false;
@@ -1124,14 +1456,14 @@
                     heroTypewriterElement.textContent = currentWord.substring(0, heroCharIndex + 1);
                     heroCharIndex++;
                 }
-                let typingSpeed = isHeroDeleting ? 50 : 100;
+                let typingSpeed = isHeroDeleting ? 45 : 85;
                 if (!isHeroDeleting && heroCharIndex === currentWord.length) {
-                    typingSpeed = 2000;
+                    typingSpeed = 2200; // Pause at end of word
                     isHeroDeleting = true;
                 } else if (isHeroDeleting && heroCharIndex === 0) {
                     isHeroDeleting = false;
                     heroWordIndex = (heroWordIndex + 1) % heroWords.length;
-                    typingSpeed = 500;
+                    typingSpeed = 400; // Pause before typing next word
                 }
                 setTimeout(typeHero, typingSpeed);
             }
