@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samiksha Raj | Founder Dashboard</title>
+    
+    <!-- Fonts: Space Grotesk for headers, Inter for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        tech: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#05050f',
+                            card: '#0c0c1d',
+                            purple: '#8b5cf6',
+                            blue: '#3b82f6',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #05050f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(12, 12, 29, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Premium Spotlight Hover Effect */
+        .glass-panel::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(139, 92, 246, 0.15), transparent 40%);
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .glass-panel:hover::before {
+            opacity: 1;
+        }
+        .glass-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .glass-panel:hover {
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(139, 92, 246, 0.15);
+        }
+
+        #particle-canvas {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6;
+        }
+
+        /* Global Fade-Up Animation */
+        .fade-up-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .fade-up-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Timeline Animations & Mobile Adjustments */
+        .timeline-line {
+            position: absolute; left: 50%; transform: translateX(-50%); width: 2px; height: 100%;
+            background: linear-gradient(to bottom, transparent, #8b5cf6, #3b82f6, transparent);
+        }
+        @media (max-width: 768px) {
+            .timeline-line { left: 20px; }
+            .timeline-dot { left: 20px !important; }
+            .timeline-content { width: calc(100% - 60px) !important; margin-left: 60px !important; }
+        }
+
+        /* Orbiting Skills - Responsive setup */
+        .orbit-container {
+            position: relative; width: 100%; max-width: 500px; aspect-ratio: 1; margin: 0 auto;
+            border-radius: 50%; border: 1px dashed rgba(139, 92, 246, 0.15);
+        }
+        
+        /* Floating Animation for static skills */
+        @keyframes soft-float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Project Cards Staggered Animation */
+        .project-card {
+            opacity: 0; 
+            transform: translateY(50px); 
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .project-card.visible {
+            opacity: 1; 
+            transform: translateY(0);
+        }
+        .project-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 10;
+        }
+
+        /* Progress Bars */
+        .progress-fill-bar {
+            transition: width 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Terminal effect cursor */
+        .cursor-blink { animation: blink 1s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* AI Chat styling */
+        .chat-bubble-user { background: linear-gradient(to right, #8b5cf6, #3b82f6); color: white; border-bottom-right-radius: 0; }
+        .chat-bubble-ai { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(139, 92, 246, 0.3); border-bottom-left-radius: 0; }
+
+        /* Flowing Gradient Text */
+        .animate-gradient-text {
+            background: linear-gradient(to right, #8b5cf6, #3b82f6, #06b6d4, #8b5cf6);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: gradientMove 4s linear infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Breathing Background Blobs */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.2; }
+            50% { transform: scale(1.1) translate(20px, 20px); opacity: 0.35; }
+        }
+        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+        .animate-pulse-slow-delay { animation: pulse-slow 8s ease-in-out infinite; animation-delay: 4s; }
+        
+        /* Bouncing Arrow */
+        .animate-bounce-custom { animation: bounceCustom 2s infinite; }
+        @keyframes bounceCustom {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-5px); }
+            60% { transform: translateY(-3px); }
+        }
+
+        /* Custom Webkit Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #05050f; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8b5cf6; }
+
+        /* Enhanced Stat Card Glow */
+        #dashboard .glass-panel:hover {
+            box-shadow: 0 0 30px -5px rgba(59, 130, 246, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        /* 3D Tilt Utilities for Projects */
+        .project-card { 
+            transform-style: preserve-3d; 
+            will-change: transform; 
+            transition: transform 0.5s ease-out; 
+        }
+        .project-card > div { 
+            transform: translateZ(30px); 
+            transition: transform 0.3s ease; 
+        }
+        .project-card:hover > div { 
+            transform: translateZ(50px); 
+        }
+
+        /* Flowing Timeline Gradient Line */
+        .timeline-line {
+            background: linear-gradient(to bottom, transparent, #8b5cf6, #06b6d4, #3b82f6, transparent);
+            background-size: 100% 200%;
+            animation: flowLine 3s linear infinite;
+        }
+        @keyframes flowLine {
+            0% { background-position: 0% -100%; }
+            100% { background-position: 0% 100%; }
+        }
+
+        /* Radar Pulse on Timeline Dots */
+        .timeline-dot::after {
+            content: '';
+            position: absolute; inset: -5px; border-radius: 50%;
+            border: 2px solid rgba(139, 92, 246, 0.6);
+            animation: radarPulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes radarPulse {
+            75%, 100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        /* 3D Animated Grid Background */
+        .bg-grid {
+            position: absolute; bottom: -50%; left: -50%; width: 200%; height: 200%;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            transform: perspective(500px) rotateX(60deg) translateY(0);
+            animation: gridMove 20s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+            -webkit-mask-image: linear-gradient(to top, transparent 10%, black 80%);
+            mask-image: linear-gradient(to top, transparent 10%, black 80%);
+        }
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Cyber Glitch Effect on Name Hover */
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text:hover::before, .glitch-text:hover::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: transparent; pointer-events: none;
+        }
+        .glitch-text:hover::before {
+            left: 3px; text-shadow: -2px 0 #06b6d4; clip: rect(24px, 9999px, 90px, 0); animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch-text:hover::after {
+            left: -3px; text-shadow: -2px 0 #8b5cf6; clip: rect(85px, 9999px, 140px, 0); animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(11px, 9999px, 86px, 0); } 20% { clip: rect(44px, 9999px, 13px, 0); }
+            40% { clip: rect(89px, 9999px, 55px, 0); } 60% { clip: rect(12px, 9999px, 99px, 0); }
+            80% { clip: rect(76px, 9999px, 33px, 0); } 100% { clip: rect(22px, 9999px, 77px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); } 20% { clip: rect(12px, 9999px, 54px, 0); }
+            40% { clip: rect(88px, 9999px, 22px, 0); } 60% { clip: rect(34px, 9999px, 88px, 0); }
+            80% { clip: rect(98px, 9999px, 11px, 0); } 100% { clip: rect(45px, 9999px, 66px, 0); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-purple selection:text-white">
+
+    <!-- Background Gradients -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-purple rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-blue rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-pulse-slow-delay"></div>
+    </div>
+
+    <!-- Responsive Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b-0 border-t-0 border-x-0 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 font-tech font-bold text-xl md:text-2xl tracking-tighter z-50">
+                    <a href="#home" class="flex items-center gap-2 group">
+                        <span class="w-8 h-8 rounded bg-gradient-to-br from-brand-purple to-brand-blue flex items-center justify-center text-white text-sm">SR</span>
+                        <span>Samiksha Raj<span class="text-brand-purple">.</span></span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center font-tech text-sm">
+                    <a href="#dashboard" class="text-gray-300 hover:text-white transition-colors">Dashboard</a>
+                    <a href="#experience" class="text-gray-300 hover:text-white transition-colors">Experience</a>
+                    <a href="#projects" class="text-gray-300 hover:text-white transition-colors">Products</a>
+                    <a href="#skills" class="text-gray-300 hover:text-white transition-colors">Skills</a>
+                    <a href="#ai" class="text-gray-300 hover:text-white transition-colors">Ask AI</a>
+                    <a href="#contact" class="px-5 py-2.5 bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition-all backdrop-blur-md">Connect</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center z-50">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white focus:outline-none p-2">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 w-full glass-panel border-t border-white/10">
+            <div class="px-4 pt-2 pb-6 space-y-2 font-tech flex flex-col">
+                <a href="#dashboard" class="block px-3 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Dashboard</a>
+                <a href="#experience" class="block px-3 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Experience</a>
+                <a href="#projects" class="block px-3 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Products</a>
+                <a href="#skills" class="block px-3 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Skills</a>
+                <a href="#ai" class="block px-3 py-3 text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors">Ask AI</a>
+                <a href="#contact" class="block px-3 py-3 text-brand-cyan hover:text-white transition-colors font-bold mt-2">Connect <i class="fas fa-arrow-right ml-2 text-xs"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <canvas id="particle-canvas"></canvas>
+        <div class="bg-grid"></div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center fade-up-element flex flex-col items-center">
+            
+            <!-- H1 NAME -->
+            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-tech font-bold tracking-tight drop-shadow-lg animate-gradient-text glitch-text mb-4" data-text="Samiksha Raj">
+                Samiksha Raj
+            </h1>
+            
+            <!-- THE TYPEWRITER BADGE (Directly below name, perfectly centered) -->
+            <div class="inline-flex items-center gap-3 px-6 py-2.5 glass-panel rounded-full mb-6 transform hover:-translate-y-1 transition-transform border border-brand-cyan/40 shadow-[0_0_20px_rgba(6,182,212,0.3)] z-20">
+                <span class="text-brand-cyan font-mono text-base md:text-lg font-bold">>_</span>
+                <span id="hero-typewriter" class="font-tech text-base md:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-brand-blue min-w-[150px] text-left"></span>
+                <span class="w-2.5 h-5 md:h-6 bg-brand-purple animate-pulse"></span>
+            </div>
+            
+            <!-- H2 SUBTITLE (Directly below the typewriter) -->
+            <h2 class="text-lg md:text-2xl font-light text-gray-400 mb-10 font-tech leading-relaxed max-w-3xl mx-auto">
+                Building Communities <span class="text-brand-purple hidden sm:inline">•</span><br class="sm:hidden"> 
+                Driving Innovation <span class="text-brand-blue hidden sm:inline">•</span><br class="sm:hidden"> 
+                Empowering Students
+            </h2>
+            
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <a href="#dashboard" class="px-8 py-4 bg-white text-black font-tech font-bold rounded-xl hover:bg-gray-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] flex items-center gap-2 transform hover:-translate-y-1">
+                    View My Journey <i class="fas fa-arrow-down animate-bounce-custom"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up-element">
+                <h3 class="text-brand-cyan font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Metrics</h3>
+                <h2 class="text-3xl md:text-5xl font-tech font-bold text-white">Impact Dashboard</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto fade-up-element">
+                <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-brand-blue hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-calendar-check"></i></div>
+                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="20">0</div>
+                    <div class="text-brand-blue font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Events Organized</div>
+                </div>
+                
+                <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-brand-cyan hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-network-wired"></i></div>
+                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="3">0</div>
+                    <div class="text-brand-cyan font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Communities</div>
+                </div>
+
+                <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-pink-500 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-code-branch"></i></div>
+                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="10">0</div>
+                    <div class="text-pink-500 font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Projects Built</div>
+                </div>
+
+                <div class="glass-panel p-4 md:p-6 rounded-2xl text-center border-t-2 border-t-green-500 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="text-2xl md:text-3xl text-gray-400 mb-2 md:mb-4"><i class="fas fa-laptop-code"></i></div>
+                    <div class="text-3xl md:text-4xl font-tech font-bold text-white mb-1 counter" data-target="50">0</div>
+                    <div class="text-green-500 font-bold text-lg md:text-xl mb-1 md:mb-2">+</div>
+                    <div class="text-[10px] md:text-sm text-gray-400 font-tech uppercase tracking-wider">Hackathons</div>
+                </div>
+            </div>
+        </div>
+    </section>
+     <section id="experience" class="py-24 relative z-10 bg-brand-dark/50 overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-16 text-center md:text-left fade-up-element">
+                <h3 class="text-brand-purple font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Timeline</h3>
+                <h2 class="text-3xl md:text-5xl font-tech font-bold text-white">Execution & Leadership</h2>
+            </div>
+            
+            <div class="relative">
+                <div class="timeline-line hidden md:block"></div>
+                
+                <!-- Gemini -->
+                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16">
+                    <div class="hidden md:block w-5/12 text-right pr-8">
+                        <div class="text-brand-blue font-tech font-bold text-xl">Google</div>
+                        <div class="text-sm text-gray-400">Current Role</div>
+                    </div>
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-blue z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-star text-[10px] md:text-xs text-brand-blue"></i>
+                    </div>
+                    <div class="w-full md:w-5/12 pl-12 md:pl-8 timeline-content">
+                        <div class="glass-panel p-5 md:p-6 rounded-2xl">
+                            <div class="md:hidden text-brand-blue font-tech font-bold text-lg mb-1">Google</div>
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Gemini Student Ambassador</h3>
+                            <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">GID: 1186</p>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
+                                <li><i class="fas fa-check text-brand-blue mr-2"></i> Spearheading AI product trials and feedback loops.</li>
+                                <li><i class="fas fa-check text-brand-blue mr-2"></i> Conducting workshops to democratize AI tools.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PStud -->
+                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16 md:flex-row-reverse">
+                    <div class="w-full md:w-5/12 pl-12 md:pl-0 md:pr-8 text-left md:text-right timeline-content">
+                        <div class="glass-panel p-5 md:p-6 rounded-2xl">
+                            <div class="md:hidden text-brand-purple font-tech font-bold text-lg mb-1">PStud</div>
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Chief Operating Officer</h3>
+                            <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">Management & Operations</p>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
+                                <li><i class="fas fa-check text-brand-purple mr-2"></i> Led core business operations and strategy execution.</li>
+                                <li><i class="fas fa-check text-brand-purple mr-2"></i> Drove massive community growth and engagement.</li>
+                            </ul>
+                            <a href="https://pstud.netlify.app/" target="_blank" class="inline-block mt-4 text-[10px] md:text-xs font-tech text-brand-purple hover:text-white transition-colors border-b border-brand-purple pb-1">Visit Platform <i class="fas fa-external-link-alt ml-1"></i></a>
+                        </div>
+                    </div>
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-purple z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-briefcase text-[10px] md:text-xs text-brand-purple"></i>
+                    </div>
+                    <div class="hidden md:block w-5/12 pl-8 text-left">
+                        <div class="text-brand-purple font-tech font-bold text-xl">PStud</div>
+                        <div class="text-sm text-gray-400">Startup</div>
+                    </div>
+                </div>
+
+                <!-- StudEco -->
+                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full mb-16">
+                    <div class="hidden md:block w-5/12 text-right pr-8">
+                        <div class="text-brand-cyan font-tech font-bold text-xl">StudEco</div>
+                        <div class="text-sm text-gray-400">Startup</div>
+                    </div>
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-brand-cyan z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-rocket text-[10px] md:text-xs text-brand-cyan"></i>
+                    </div>
+                    <div class="w-full md:w-5/12 pl-12 md:pl-8 timeline-content">
+                        <div class="glass-panel p-5 md:p-6 rounded-2xl">
+                            <div class="md:hidden text-brand-cyan font-tech font-bold text-lg mb-1">StudEco</div>
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Chief Operating Officer</h3>
+                            <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">Strategic Planning</p>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
+                                <li><i class="fas fa-check text-brand-cyan mr-2"></i> Orchestrated strategic planning for ecosystem growth.</li>
+                                <li><i class="fas fa-check text-brand-cyan mr-2"></i> Fostered robust student engagement initiatives.</li>
+                            </ul>
+                            <a href="https://studeco-in.netlify.app/" target="_blank" class="inline-block mt-4 text-[10px] md:text-xs font-tech text-brand-cyan hover:text-white transition-colors border-b border-brand-cyan pb-1">Visit Platform <i class="fas fa-external-link-alt ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Education -->
+                <div class="fade-up-element timeline-item relative flex flex-col md:flex-row md:justify-between items-start md:items-center w-full">
+                    <div class="w-full md:w-5/12 pl-12 md:pl-0 md:pr-8 text-left md:text-right timeline-content md:flex-row-reverse">
+                        <div class="glass-panel p-5 md:p-6 rounded-2xl">
+                            <div class="md:hidden text-gray-400 font-tech font-bold text-lg mb-1">2024 - Present</div>
+                            <h3 class="text-xl md:text-2xl font-bold text-white mb-1">B.Tech CSE</h3>
+                            <p class="text-xs md:text-sm text-gray-400 font-tech mb-4">Sarala Birla University, Ranchi</p>
+                            <ul class="space-y-2 text-gray-300 text-xs md:text-sm">
+                                <li><i class="fas fa-graduation-cap text-gray-400 mr-2"></i> Focusing on Core CS, Frontend Dev & Web3.</li>
+                                <li><i class="fas fa-code text-gray-400 mr-2"></i> Developing strong problem-solving logic.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 w-8 h-8 rounded-full bg-brand-card border-4 border-gray-500 z-10 flex items-center justify-center timeline-dot">
+                        <i class="fas fa-university text-[10px] md:text-xs text-gray-400"></i>
+                    </div>
+                    <div class="hidden md:block w-5/12 pl-8 text-left">
+                        <div class="text-gray-400 font-tech font-bold text-xl">2024 - Present</div>
+                        <div class="text-sm text-gray-500">Education</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-white/10 pb-6 fade-up-element">
+                <div>
+                    <h3 class="text-brand-blue font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Portfolio</h3>
+                    <h2 class="text-3xl md:text-5xl font-tech font-bold text-white">Shipped Products</h2>
+                </div>
+                <a href="https://github.com/SamikshaaSingh" target="_blank" class="mt-4 md:mt-0 text-brand-cyan hover:text-white transition-colors flex items-center gap-2 font-tech text-sm">
+                    View all on GitHub <i class="fab fa-github"></i>
+                </a>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 md:gap-8">
+                <!-- SafeID -->
+                <div class="glass-panel rounded-2xl overflow-hidden group project-card" style="transition-delay: 0ms;">
+                    <div class="h-40 md:h-48 bg-gradient-to-br from-brand-card to-[#1a1a2e] relative border-b border-white/5 flex items-center justify-center overflow-hidden">
+                        <i class="fas fa-shield-alt text-5xl md:text-6xl text-brand-purple opacity-50 group-hover:scale-110 group-hover:text-brand-purple group-hover:opacity-80 transition-all duration-500"></i>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold text-white mb-1">SafeId</h3>
+                                <p class="text-brand-purple text-[10px] md:text-xs font-tech tracking-wider uppercase">Web3 / dApp</p>
+                            </div>
+                            <a href="https://safeidd.netlify.app/" target="_blank" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-purple hover:text-white transition-colors">
+                                <i class="fas fa-external-link-alt text-xs md:text-sm"></i>
+                            </a>
+                        </div>
+                        <p class="text-gray-400 text-xs md:text-sm mb-6 line-clamp-3">
+                            Led team prototyping a dApp for decentralized identity backup. Engineered a solution using IPFS for encrypted data and Polygon for verification.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-white/5 border border-white/10 rounded text-[10px] md:text-xs font-tech text-gray-300">Polygon</span>
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-white/5 border border-white/10 rounded text-[10px] md:text-xs font-tech text-gray-300">IPFS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campus Bite -->
+                <div class="glass-panel rounded-2xl overflow-hidden group project-card" style="transition-delay: 150ms;">
+                    <div class="h-40 md:h-48 bg-gradient-to-br from-brand-card to-[#112240] relative border-b border-white/5 flex items-center justify-center overflow-hidden">
+                        <i class="fas fa-hamburger text-5xl md:text-6xl text-brand-blue opacity-50 group-hover:scale-110 group-hover:text-brand-blue group-hover:opacity-80 transition-all duration-500"></i>
+                    </div>
+                    <div class="p-6 md:p-8">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Campus Bite</h3>
+                                <p class="text-brand-blue text-[10px] md:text-xs font-tech tracking-wider uppercase">Fullstack Web App</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-400 text-xs md:text-sm mb-6 line-clamp-3">
+                            Developed a 3-tier food ordering web app. Wrote SQL stored procedures using loops and IF/ELSE logic to enforce business rules and validate SBUID.
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-white/5 border border-white/10 rounded text-[10px] md:text-xs font-tech text-gray-300">PHP</span>
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-white/5 border border-white/10 rounded text-[10px] md:text-xs font-tech text-gray-300">MySQL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Internal Assignments -->
+                <div class="glass-panel rounded-2xl overflow-hidden group project-card" style="transition-delay: 300ms;">
+                    <div class="p-6 md:p-8 h-full flex flex-col relative z-10 bg-brand-card/30 hover:bg-transparent transition-colors">
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Internal Assignments</h3>
+                        <p class="text-orange-500 text-[10px] md:text-xs font-tech tracking-wider uppercase mb-4">Academic Projects</p>
+                        <p class="text-gray-400 text-xs md:text-sm mb-6 flex-grow">
+                            Designed and delivered multiple core technical assignments emphasizing algorithm optimization, data structures, and robust software architecture throughout my academic studies.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded text-[10px] md:text-xs font-tech">Problem Solving</span>
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-orange-500/10 border border-orange-500/20 text-orange-400 rounded text-[10px] md:text-xs font-tech">Algorithms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dream Career with Gemini -->
+                <div class="glass-panel rounded-2xl overflow-hidden group project-card" style="transition-delay: 450ms;">
+                    <div class="p-6 md:p-8 h-full flex flex-col relative z-10 bg-brand-card/30 hover:bg-transparent transition-colors">
+                        <h3 class="text-xl md:text-2xl font-bold text-white mb-1">Dream Career w/ Gemini</h3>
+                        <p class="text-brand-cyan text-[10px] md:text-xs font-tech tracking-wider uppercase mb-4">Content Campaign</p>
+                        <p class="text-gray-400 text-xs md:text-sm mb-6 flex-grow">
+                            Designed and executed a strategic reel campaign to educate students on utilizing Google Gemini for career advancement.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-auto">
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan rounded text-[10px] md:text-xs font-tech">Reel Campaign</span>
+                            <span class="px-2 py-1 md:px-3 md:py-1 bg-brand-cyan/10 border border-brand-cyan/20 text-brand-cyan rounded text-[10px] md:text-xs font-tech">Strategy</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-24 relative z-10 bg-brand-dark/50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Skills Orbit (Static and Centered for readability) -->
+            <div class="flex flex-col items-center text-center w-full mb-24 fade-up-element">
+                <h3 class="text-brand-purple font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Capabilities</h3>
+                <h2 class="text-3xl md:text-4xl font-tech font-bold text-white mb-10">Skill Universe</h2>
+                
+                <div class="orbit-container my-12 h-[300px] md:h-[400px]" id="orbit-system">
+                    <!-- JS injects static floating elements here for perfect responsive placement -->
+                </div>
+            </div>
+
+            <!-- ENHANCED EXPLICIT PROGRESS BARS FOR ALL SKILLS -->
+            <div class="w-full mb-32 fade-up-element">
+                <h3 class="text-center text-brand-cyan font-tech mb-8 md:mb-12 uppercase tracking-widest flex items-center justify-center gap-3 text-sm md:text-lg">
+                    <i class="fas fa-layer-group"></i> Technical Arsenal
+                </h3>
+                
+                <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+                    <!-- Frontend -->
+                    <div class="glass-panel p-5 md:p-6 rounded-2xl border-t-2 border-t-pink-500 hover:shadow-[0_0_30px_rgba(236,72,153,0.15)] transition-shadow">
+                        <h4 class="text-white font-tech font-bold mb-6 flex items-center gap-2"><i class="fas fa-desktop text-pink-400"></i> Frontend</h4>
+                        
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fab fa-html5 text-pink-400"></i> HTML & CSS</span>
+                                <span class="text-pink-400 font-bold text-xs md:text-sm">95%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-pink-600 to-pink-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="95%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fab fa-js text-yellow-400"></i> JavaScript</span>
+                                <span class="text-yellow-400 font-bold text-xs md:text-sm">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-yellow-600 to-yellow-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="85%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Backend & Database -->
+                    <div class="glass-panel p-5 md:p-6 rounded-2xl border-t-2 border-t-brand-blue hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-shadow">
+                        <h4 class="text-white font-tech font-bold mb-6 flex items-center gap-2"><i class="fas fa-server text-brand-blue"></i> Backend & DB</h4>
+                        
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fab fa-node-js text-green-500"></i> Node.js</span>
+                                <span class="text-green-500 font-bold text-xs md:text-sm">75%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-green-600 to-green-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="75%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fab fa-php text-purple-400"></i> PHP</span>
+                                <span class="text-purple-400 font-bold text-xs md:text-sm">70%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-purple-600 to-purple-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="70%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fas fa-database text-cyan-400"></i> MySQL</span>
+                                <span class="text-cyan-400 font-bold text-xs md:text-sm">80%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-cyan-600 to-cyan-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="80%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Languages -->
+                    <div class="glass-panel p-5 md:p-6 rounded-2xl border-t-2 border-t-brand-cyan hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-shadow">
+                        <h4 class="text-white font-tech font-bold mb-6 flex items-center gap-2"><i class="fas fa-microchip text-brand-cyan"></i> Core Languages</h4>
+                        
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fab fa-python text-blue-400"></i> Python</span>
+                                <span class="text-blue-400 font-bold text-xs md:text-sm">90%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-blue-600 to-blue-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="90%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mb-5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-white font-tech text-xs md:text-sm flex items-center gap-2"><i class="fas fa-file-code text-orange-500"></i> C/C++</span>
+                                <span class="text-orange-500 font-bold text-xs md:text-sm">85%</span>
+                            </div>
+                            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+                                <div class="bg-gradient-to-r from-orange-600 to-orange-400 h-full rounded-full progress-fill-bar" style="width: 0%;" data-width="85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center text-center w-full fade-up-element">
+                <h3 class="text-brand-blue font-tech tracking-widest uppercase text-xs md:text-sm mb-2">Milestones</h3>
+                <h2 class="text-3xl md:text-4xl font-tech font-bold text-white mb-8 md:mb-10">Achievements</h2>
+                
+                <div class="grid md:grid-cols-3 gap-4 md:gap-6 w-full text-left">
+                    <!-- Innov-8-A-Thon -->
+                    <div class="glass-panel p-5 md:p-6 rounded-xl border-t-4 border-t-brand-purple hover:-translate-y-2 transition-transform">
+                        <div class="mb-3 md:mb-4 text-brand-purple text-2xl md:text-3xl"><i class="fas fa-trophy"></i></div>
+                        <h4 class="text-white font-bold text-base md:text-lg mb-2">Convener, Innov8-A-Thon</h4>
+                        <p class="text-xs md:text-sm text-gray-400">Organized and hosted a 24-hour national hackathon at Sarala Birla University.</p>
+                    </div>
+
+                    <!-- Active Hackathon Participant -->
+                    <div class="glass-panel p-5 md:p-6 rounded-xl border-t-4 border-t-brand-cyan hover:-translate-y-2 transition-transform">
+                        <div class="mb-3 md:mb-4 text-brand-cyan text-2xl md:text-3xl"><i class="fas fa-laptop-code"></i></div>
+                        <h4 class="text-white font-bold text-base md:text-lg mb-2">Active Hackathon Participant</h4>
+                        <p class="text-xs md:text-sm text-gray-400">Consistent track record of building projects in competitive environments.</p>
+                    </div>
+                    
+                    <!-- Leadership Excellence -->
+                    <div class="glass-panel p-5 md:p-6 rounded-xl border-t-4 border-t-pink-500 hover:-translate-y-2 transition-transform">
+                        <div class="mb-3 md:mb-4 text-pink-500 text-2xl md:text-3xl"><i class="fas fa-crown"></i></div>
+                        <h4 class="text-white font-bold text-base md:text-lg mb-2">Leadership Excellence</h4>
+                        <p class="text-xs md:text-sm text-gray-400">Dual COO roles highlighting extreme ownership and strategic execution.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="ai" class="py-24 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 fade-up-element">
+            <div class="glass-panel rounded-3xl p-1 relative overflow-hidden shadow-2xl">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-purple via-brand-blue to-brand-cyan opacity-20 blur-xl z-0"></div>
+                <div class="relative z-10 bg-brand-card rounded-[22px] p-5 md:p-10 border border-white/10">
+                    <div class="flex items-center justify-between mb-6 md:mb-8 pb-4 border-b border-white/10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue flex items-center justify-center text-white">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg md:text-xl font-tech font-bold text-white">Ask Samiksha AI</h3>
+                                <p class="text-[10px] md:text-xs text-brand-cyan">Powered by Portfolio Data</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <div class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-green-500 animate-pulse"></div>
+                            <span class="text-[10px] md:text-xs font-tech text-gray-400 uppercase tracking-widest hidden sm:block">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="h-48 md:h-64 overflow-y-auto mb-6 pr-2 space-y-4" id="chat-box">
+                        <div class="flex flex-col items-start">
+                            <div class="chat-bubble-ai px-4 py-3 rounded-2xl max-w-[90%] md:max-w-[85%] text-xs md:text-sm text-gray-200">
+                                Hello! I'm an AI assistant trained on Samiksha's portfolio. You can ask me things like:<br>
+                                <ul class="list-disc ml-4 md:ml-5 mt-2 text-brand-cyan space-y-1">
+                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What does Samiksha do?')">What does Samiksha do?</li>
+                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What projects has she worked on?')">What projects has she worked on?</li>
+                                    <li class="cursor-pointer hover:underline" onclick="fillInput('What are her skills?')">What are her skills?</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form id="ai-form" class="relative">
+                        <input type="text" id="ai-input" placeholder="Type your question..." class="w-full bg-black/50 border border-white/20 rounded-xl py-3 md:py-4 pl-4 pr-12 md:pr-14 text-white focus:outline-none focus:border-brand-purple transition-colors font-tech text-sm md:text-base">
+                        <button type="submit" class="absolute right-2 top-2 bottom-2 w-10 bg-brand-purple rounded-lg text-white hover:bg-brand-blue transition-colors flex items-center justify-center">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-24 relative z-10 border-t border-white/5">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center fade-up-element">
+            <div class="bg-[#0f0f15] border border-gray-800 rounded-xl overflow-hidden shadow-2xl mx-auto text-left max-w-2xl transform transition-transform hover:scale-[1.01] duration-300">
+                <div class="bg-gray-900 px-4 py-3 flex items-center gap-2 border-b border-gray-800">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div class="ml-4 text-xs font-tech text-gray-400 font-mono">samiksha@founder-dash:~</div>
+                </div>
+                <div class="p-4 md:p-6 font-mono text-xs md:text-sm text-green-400 min-h-[180px] md:min-h-[200px]" id="terminal-body">
+                    <div id="terminal-line-1" class="hidden">
+                        <span class="text-blue-400">➜</span> <span class="text-cyan-300">~</span> <span id="typewriter-text"></span><span class="cursor-blink">█</span>
+                    </div>
+                    <div id="terminal-line-2" class="hidden mt-4 text-brand-purple font-bold">
+                        Connection Established ✓
+                    </div>
+                    <div id="terminal-links" class="hidden mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+                        <a href="https://www.linkedin.com/in/samiksharaj" target="_blank" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
+                            <i class="fab fa-linkedin mr-2"></i> LinkedIn
+                        </a>
+                        <a href="mailto:samiksharaj07@gmail.com" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
+                            <i class="fas fa-envelope mr-2"></i> Email
+                        </a>
+                        <a href="https://github.com/SamikshaaSingh" target="_blank" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
+                            <i class="fab fa-github mr-2"></i> GitHub
+                        </a>
+                        <a href="tel:+919341473288" class="block border border-green-400/30 p-2 md:p-3 text-center hover:bg-green-400/10 hover:border-green-400/80 transition-all rounded">
+                            <i class="fas fa-phone-alt mr-2"></i> Phone
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-8 text-center text-gray-500 text-xs md:text-sm font-tech border-t border-white/5 relative z-10">
+        &copy; <span id="year"></span> Samiksha Raj. All systems operational.
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // --- Mobile Menu Logic ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- Performance-Optimized Particle Background ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2; this.speedX = Math.random() * 0.5 - 0.25; this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0; else if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0; else if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(139, 92, 246, 0.5)'; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = []; 
+            let numParticles = window.innerWidth < 768 ? 40 : (canvas.width * canvas.height) / 15000;
+            for (let i = 0; i < numParticles; i++) particles.push(new Particle());
+        }
+
+        let mouse = { x: null, y: null, radius: 150 };
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x; mouse.y = event.y;
+        });
+        window.addEventListener('mouseout', function() {
+            mouse.x = null; mouse.y = null;
+        });
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update(); particles[i].draw();
+                
+                if (mouse.x != null) {
+                    let dx = particles[i].x - mouse.x; let dy = particles[i].y - mouse.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(139, 92, 246, ${1 - distance/mouse.radius})`;
+                        ctx.lineWidth = 1.5; ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+                    }
+                }
+                let maxDist = window.innerWidth < 768 ? 70 : 100;
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x; let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < maxDist) {
+                        ctx.beginPath(); ctx.strokeStyle = `rgba(59, 130, 246, ${1 - distance/maxDist})`;
+                        ctx.lineWidth = 0.5; ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y); ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        initParticles(); animateParticles();
+
+        // --- Generic Scroll Reveal Observer ---
+        const fadeElements = document.querySelectorAll('.fade-up-element');
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) { entry.target.classList.add('visible'); }
+            });
+        }, { threshold: 0.1 });
+        fadeElements.forEach(el => fadeObserver.observe(el));
+
+        // --- Animated Stats Counters ---
+        const counters = document.querySelectorAll('.counter');
+        const counterObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const target = +entry.target.getAttribute('data-target');
+                    let count = 0; const increment = target / 50;
+                    const updateCount = () => {
+                        count += increment;
+                        if(count < target) { entry.target.innerText = Math.ceil(count); setTimeout(updateCount, 20); }
+                        else { entry.target.innerText = target; }
+                    };
+                    updateCount(); observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        counters.forEach(counter => counterObserver.observe(counter));
+
+        // --- Timeline Scroll Animation ---
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) { entry.target.classList.add('visible'); }
+            });
+        }, { threshold: 0.2 });
+        timelineItems.forEach(item => timelineObserver.observe(item));
+        
+        // --- Project Cards Staggered Reveal ---
+        const projectCards = document.querySelectorAll('.project-card');
+        const projectObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) { entry.target.classList.add('visible'); }
+            });
+        }, { threshold: 0.1 });
+        projectCards.forEach(card => projectObserver.observe(card));
+
+        // --- STREAMING_CHUNK:Configuring skill orbit and interaction observers ---
+        // --- Responsive Static Skill Orbit ---
+        const orbitSystem = document.getElementById('orbit-system');
+        const skills = ['Leadership', 'Public Speaking', 'Event Mgmt', 'Community', 'Entrepreneurship', 'Content', 'AI Tools', 'Strategy'];
+        
+        function renderOrbit() {
+            if(!orbitSystem) return;
+            orbitSystem.innerHTML = `
+                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-brand-purple to-brand-blue p-1 shadow-[0_0_30px_rgba(139,92,246,0.5)] z-20">
+                    <div class="w-full h-full bg-brand-card rounded-full flex items-center justify-center font-tech font-bold text-white text-center leading-tight text-xs md:text-base">
+                        Samiksha<br>Raj
+                    </div>
+                </div>
+            `;
+            
+            const radius = window.innerWidth < 640 ? 110 : 160;
+            
+            skills.forEach((skill, index) => {
+                const angle = (index / skills.length) * (2 * Math.PI);
+                const x = Math.cos(angle) * radius; 
+                const y = Math.sin(angle) * radius;
+                
+                const item = document.createElement('div'); 
+                item.className = 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10';
+                item.style.marginLeft = `${x}px`;
+                item.style.marginTop = `${y}px`;
+                
+                const content = document.createElement('div'); 
+                content.className = 'bg-brand-card/95 border border-brand-blue/40 px-3 py-1.5 md:px-4 md:py-2 rounded-full whitespace-nowrap text-[10px] md:text-sm font-medium text-white shadow-[0_0_15px_rgba(59,130,246,0.2)]'; 
+                content.innerText = skill;
+                content.style.animation = `soft-float 4s ease-in-out infinite ${index * 0.3}s`;
+                
+                item.appendChild(content); 
+                orbitSystem.appendChild(item);
+            });
+        }
+        renderOrbit();
+        window.addEventListener('resize', renderOrbit);
+
+        // --- Progress Bar Trigger ---
+        const progressBars = document.querySelectorAll('.progress-fill-bar');
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.width = entry.target.getAttribute('data-width');
+                }
+            });
+        }, { threshold: 0.1 });
+        progressBars.forEach(bar => progressObserver.observe(bar));
+
+        // --- Ask AI Logic ---
+        const aiForm = document.getElementById('ai-form'); const aiInput = document.getElementById('ai-input');
+        const chatBox = document.getElementById('chat-box');
+        function fillInput(text) { aiInput.value = text; aiInput.focus(); }
+        const aiResponses = {
+            'do': 'I am the COO of PStud and StudEco, a Google Gemini Student Ambassador, and a B.Tech CSE student at Sarala Birla University. I specialize in community building and frontend development.',
+            'project': 'I have worked on several cool projects! "SafeId" is a Web3 dApp for identity backup, "Campus Bite" is a fullstack food ordering app, and I lead campaigns like "Dream Career with Gemini".',
+            'skill': 'My core skills include Leadership, Event Management, Community Building, and AI Tools. Technically, I work with Python, JavaScript, HTML/CSS, PHP, and MySQL.',
+            'contact': 'You can reach me via email at samiksharaj07@gmail.com, or call me at +919341473288. Also, feel free to connect on LinkedIn!',
+            'default': "That's an interesting question! While I'm just a simple AI representation of Samiksha's portfolio, you can find most of my professional details scrolling through this dashboard, or you can contact me directly at samiksharaj07@gmail.com!"
+        };
+        function addMessage(text, isUser) {
+            const div = document.createElement('div'); div.className = `flex flex-col ${isUser ? 'items-end' : 'items-start'} mb-4`;
+            const bubble = document.createElement('div'); bubble.className = `px-4 py-3 rounded-2xl max-w-[85%] text-xs md:text-sm ${isUser ? 'chat-bubble-user' : 'chat-bubble-ai text-gray-200'}`;
+            bubble.innerText = text; div.appendChild(bubble); chatBox.appendChild(div); chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        aiForm.addEventListener('submit', (e) => {
+            e.preventDefault(); const val = aiInput.value.trim(); if(!val) return;
+            addMessage(val, true); aiInput.value = '';
+            setTimeout(() => {
+                const lowerVal = val.toLowerCase(); let response = aiResponses['default'];
+                if (lowerVal.includes('do') || lowerVal.includes('who') || lowerVal.includes('about')) response = aiResponses['do'];
+                else if (lowerVal.includes('project') || lowerVal.includes('work') || lowerVal.includes('build')) response = aiResponses['project'];
+                else if (lowerVal.includes('skill') || lowerVal.includes('tech') || lowerVal.includes('know')) response = aiResponses['skill'];
+                else if (lowerVal.includes('contact') || lowerVal.includes('email') || lowerVal.includes('phone')) response = aiResponses['contact'];
+                addMessage(response, false);
+            }, 800);
+        });
+
+        // --- STREAMING_CHUNK:Finalizing UI interactions and terminal behavior ---
+        // --- Terminal Animation Mobile Fix ---
+        const terminalSection = document.getElementById('contact'); let terminalPlayed = false;
+        const terminalObserver = new IntersectionObserver((entries) => {
+            if(entries[0].isIntersecting && !terminalPlayed) {
+                terminalPlayed = true; 
+                const line1 = document.getElementById('terminal-line-1');
+                const textSpan = document.getElementById('typewriter-text'); 
+                const line2 = document.getElementById('terminal-line-2');
+                const links = document.getElementById('terminal-links'); 
+                const cursor = document.querySelector('.cursor-blink');
+                
+                line1.classList.remove('hidden'); 
+                const cmd = "connect --with samiksha"; let i = 0;
+                
+                const typeWriter = setInterval(() => {
+                    if (i < cmd.length) { 
+                        textSpan.innerHTML += cmd.charAt(i); i++; 
+                    } else {
+                        clearInterval(typeWriter); cursor.style.display = 'none';
+                        setTimeout(() => { 
+                            line2.classList.remove('hidden'); 
+                            setTimeout(() => { links.classList.remove('hidden'); }, 400); 
+                        }, 500);
+                    }
+                }, 80); 
+            }
+        }, { threshold: 0.1 }); 
+        terminalObserver.observe(terminalSection);
+
+        // --- NEW PREMIUM JS ANIMATIONS ---
+
+        // 1. 3D Tilt Effect for Project Cards
+        const projectTiltCards = document.querySelectorAll('.project-card');
+        projectTiltCards.forEach(card => {
+            card.addEventListener('mousemove', e => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -12;
+                const rotateY = ((x - centerX) / centerX) * 12;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                card.style.transition = 'none'; 
+                card.style.zIndex = '20';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)`;
+                card.style.transition = 'transform 0.5s ease-out';
+                card.style.zIndex = '10';
+            });
+        });
+
+        // 2. Dynamic Glass Navbar on Scroll
+        const navBar = document.querySelector('nav');
+        const navContainer = navBar.querySelector('.h-20, .h-16');
+        if(navContainer) navContainer.classList.add('transition-all', 'duration-300');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navBar.style.background = 'rgba(5, 5, 15, 0.9)';
+                navBar.style.boxShadow = '0 10px 30px -10px rgba(139, 92, 246, 0.3)';
+                if(navContainer) {
+                    navContainer.classList.remove('h-20');
+                    navContainer.classList.add('h-16');
+                }
+            } else {
+                navBar.style.background = 'rgba(12, 12, 29, 0.6)';
+                navBar.style.boxShadow = 'none';
+                if(navContainer) {
+                    navContainer.classList.remove('h-16');
+                    navContainer.classList.add('h-20');
+                }
+            }
+        });
+
+        // 3. Spotlight Hover Tracker for all Glass Panels
+        const glassPanels = document.querySelectorAll('.glass-panel');
+        glassPanels.forEach(panel => {
+            panel.addEventListener('mousemove', e => {
+                const rect = panel.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                panel.style.setProperty('--mouse-x', `${x}px`);
+                panel.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // 4. Hero Typewriter Effect
+        const heroWords = ["A Student", "Tech Enthusiast", "Software Engineer", "Full Stack Developer"];
+        let heroWordIndex = 0;
+        let heroCharIndex = 0;
+        let isHeroDeleting = false;
+        const heroTypewriterElement = document.getElementById('hero-typewriter');
+
+        if(heroTypewriterElement) {
+            function typeHero() {
+                const currentWord = heroWords[heroWordIndex];
+                if (isHeroDeleting) {
+                    heroTypewriterElement.textContent = currentWord.substring(0, heroCharIndex - 1);
+                    heroCharIndex--;
+                } else {
+                    heroTypewriterElement.textContent = currentWord.substring(0, heroCharIndex + 1);
+                    heroCharIndex++;
+                }
+                let typingSpeed = isHeroDeleting ? 50 : 100;
+                if (!isHeroDeleting && heroCharIndex === currentWord.length) {
+                    typingSpeed = 2000;
+                    isHeroDeleting = true;
+                } else if (isHeroDeleting && heroCharIndex === 0) {
+                    isHeroDeleting = false;
+                    heroWordIndex = (heroWordIndex + 1) % heroWords.length;
+                    typingSpeed = 500;
+                }
+                setTimeout(typeHero, typingSpeed);
+            }
+            setTimeout(typeHero, 1000);
+        }
+    </script>
+</body>
+</html>
